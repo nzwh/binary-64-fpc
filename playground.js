@@ -25,24 +25,23 @@ function normalize(number) {
     number.length : number.indexOf(".");
   let intg = number.toString().split('.')[0] || 0;
   let frac = number.toString().split('.')[1] || '';
-
+  
   let exponent = parseFloat(intg) != 0 ? 
     intg.indexOf("1") + 1 - position : frac.indexOf("1") + 1;
 
   let result = number.replace(".", "");
-  return [result.substring(0, position + exponent) +   
-    "." + result.substring(position + exponent), -exponent];
+  return [parseFloat(result.substring(0, position + exponent) +   
+    "." + result.substring(position + exponent)).toString(), -exponent];
 }
 
 function print_results(n, b, e) {
-
   let displaced = displace10(n, e);
   let displaced_binary = (b == 10) ? binary(displaced) : displaced.toString();
   let [normalized, exponent] = normalize(displaced_binary);
 
   let sign = n < 0 ? 1 : 0;
-  let exponent_bits = (1023 + exponent).toString(2).padStart(8, "0");
-  let mantissa = normalized.substring(1).replace(".", "").padEnd(52, "0");
+  let exponent_bits = (exponent + 1023).toString(2).padStart(11, "0");
+  let mantissa = normalized.substring(normalized.indexOf(".")+1).padEnd(52, "0");
 
   console.log(`\nInput value: ${n} x ${b}^${e}`)
   console.log(`Binary conversion: ${displaced_binary}`);
@@ -56,3 +55,5 @@ function print_results(n, b, e) {
 print_results(39, 10, 0);
 print_results(1812.5, 10, -2);
 print_results(10.0101, 2, 2);
+
+print_results(-100.111, 2, -7);
