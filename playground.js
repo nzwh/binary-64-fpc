@@ -38,25 +38,41 @@ function normalize(number) {
 }
 
 function print_results(n, b, e) {
+  let negative = (n[0] == '-') ? "1" : "0";
+  n = parseFloat(n);
+
   let displaced = displace10(n, e);
   let displaced_binary = (b == 10) ? binary(parseFloat(displaced)) : displaced.toString();
   let [normalized, exponent] = normalize(displaced_binary);
 
-  let sign = n < 0 ? 1 : 0;
+  let sign = negative;
   let exponent_bits = "", mantissa = "";
 
-  if (exponent + 1023 < 0) {
+  if (n == 0) {
+    console.log("Case: Zero");
+    exponent_bits = "0".repeat(11);
+    mantissa = "0".repeat(52);
+
+  } else if (isNaN(n)) {
+    console.log("Case: NaN");
+    exponent_bits = "1".repeat(11);
+    mantissa = "1".repeat(52);
+
+  } else if (exponent + 1023 < 0) {
     console.log("Case: Denormalized");
     exponent_bits = "0".repeat(11);
     mantissa = offset(n, exponent + 1023 - 1).split(".")[1].padEnd(52, "0");
+
   } else if (exponent > 1023) {
     console.log("Case: Infinity");
     exponent_bits = "1".repeat(11);
     mantissa = "0".repeat(52);
+
   } else {
     console.log("Case: Default");
     exponent_bits = (exponent + 1023).toString(2).padStart(11, "0");
-    mantissa = normalized.substring(Math.max(normalized.indexOf(".") + 1, 1)).padEnd(52, "0");
+    mantissa = (!isNaN(normalized) ? 
+      normalized.substring(Math.max(normalized.indexOf(".") + 1, 1)) : "").padEnd(52, "0");
   }
 
   console.log(`\nInput value: ${n} x ${b}^${e}`)
@@ -68,7 +84,7 @@ function print_results(n, b, e) {
 }
 
 // test cases
-// print_results(39.0, 10, 0);
+//print_results("-0", 10, 0);
 // print_results(1812.5, 10, -2);
 // print_results(10.0101, 2, 2);
 
