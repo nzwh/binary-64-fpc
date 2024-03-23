@@ -1,5 +1,6 @@
 ## Important Links
-- [Test Cases (screenshots)](https://drive.google.com/drive/folders/1Ldmd_FBrG55PzPAkDz6PfI9FVsaOElit?usp=sharing)
+- [Analysis Writeup](https://docs.google.com/document/d/1YoQ0jwMgpJphToLIlRZ_3o0-RxldbMPBoN423fm6bvg/edit?usp=sharing)
+- [Test Cases (Screenshots)](https://drive.google.com/drive/folders/1Ldmd_FBrG55PzPAkDz6PfI9FVsaOElit?usp=sharing)
 - [Short Video Recording](https://zoom.us/rec/share/Uy0gv-1YHqSiKDIi3kMFDLbNgkt3CjaLBEKYAYzE6nPuNg07ezgvrp2eB-XypqSw.M1jeazVRy3a9sOav?startTime=1711193082000)
 
 ## Getting Started
