@@ -58,7 +58,7 @@ function get_results(n: string, b: number, e: number): string[] {
     exponent_bits = "1".repeat(11);
     mantissa = "1".repeat(52);
 
-  } else if (e + 1023 < 0) {
+  } else if ((b == 2 && e + 1023 < 0) || (b == 10 && e + 309 < 0)) {
     s_case = "Denormalized";
     exponent_bits = "0".repeat(11);
     mantissa = offset((b == 2) ? number : parseFloat(number.toString(2)), e + 1023 - 1).split(".")[1].padEnd(52, "0");
