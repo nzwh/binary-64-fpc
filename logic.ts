@@ -48,8 +48,6 @@ function get_results(n: string, b: number, e: number): string[] {
   let exponent_bits = "", mantissa = "";
   let s_case = "";
 
-  console.log(exponent);
-
   if (number == 0) {
     s_case = "Zero";
     exponent_bits = "0".repeat(11);

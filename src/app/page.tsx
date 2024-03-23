@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react";
-// import logic ts file
 import { get_results } from "../../logic";
 
 export default function Home() {
@@ -58,13 +57,53 @@ export default function Home() {
 
     setOutput({ displaced_binary, n_binary, sign, exponent_bits, mantissa, hex, s_case, full_output });
     setGroups(full_output.match(/.{1,4}/g));
-
-    console.log(s_case);
   };
+
+  const [downloading, setDownloading] = useState(false);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+
+    try {
+      const textContent = createTextFileContent(input, output); // Function provided below
+      const blob = new Blob([textContent], { type: 'text/plain' });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'B64-FPC Results.txt';
+      link.click();
+
+      setTimeout(() => {
+        URL.revokeObjectURL(url);
+        setDownloading(false);
+      }, 100);
+    } catch (error) {
+      console.error('Error downloading file:', error);
+      setDownloading(false);
+    }
+  };
+
+  function createTextFileContent(input: any, output: any) {
+    const formattedResults = `
+      Input value: ${input.number} x ${input.base}^${input.exponent}
+      Normalized: ${output.n_binary}
+      Case: ${output.s_case || 'Default'}
+
+      Raw binary representation:
+      ${output.full_output}
+      Hex representation:
+      ${output.hex}
+      `;
+  
+    return formattedResults;
+  }
 
   return (
     <main className="h-screen w-screen bg-[#D8DFE5] flex items-center justify-center">
       <section id="container" className="w-[80rem] h-[40rem] bg-gradient-to-b from-[#F0F6F9] to-[#e2e9ed] text-black rounded shadow-2xl shadow-slate-300 flex flex-col items-center justify-center transition-transform px-8 gap-8">
+
+        <h1 className="bold font-black tracking-tight text-slate-800">Binary-64 Floating Point Calculator</h1>
 
         <form onSubmit={handleCalculate} action="javascript:void(0);" className="w-auto h-auto flex flex-col gap-4 items-center">
 
@@ -100,6 +139,9 @@ export default function Home() {
           <div className="flex flex-row gap-4">
             <button className="w-[8rem] h-[2.5rem] text-white rounded bg-gradient-to-b from-violet-300 to-violet-400 shadow-xl hover:shadow-sm transition-shadow duration-200">Calculate</button>
             <button onClick={handleReset} className="w-[8rem] h-[2.5rem] text-white rounded bg-gradient-to-b from-violet-300 to-violet-400 shadow-xl hover:shadow-sm transition-shadow duration-200">Reset</button>
+            <button className="w-[12rem] h-[2.5rem] text-white rounded bg-gradient-to-b from-violet-300 to-violet-400 shadow-xl hover:shadow-sm transition-shadow duration-200" onClick={handleDownload} disabled={downloading}>
+              {downloading ? 'Downloading...' : 'Download Results'}
+            </button>
           </div>
         </form>
 
