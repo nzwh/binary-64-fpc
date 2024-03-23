@@ -58,10 +58,11 @@ function get_results(n: string, b: number, e: number): string[] {
     exponent_bits = "1".repeat(11);
     mantissa = "1".repeat(52);
 
-  } else if (exponent + 1023 < 0) {
+  } else if (e + 1023 < 0) {
     s_case = "Denormalized";
     exponent_bits = "0".repeat(11);
-    mantissa = offset(number, exponent + 1023 - 1).split(".")[1].padEnd(52, "0");
+    console.log(number)
+    mantissa = offset((b == 2) ? number : parseFloat(number.toString(2)), e + 1023 - 1).split(".")[1].padEnd(52, "0");
 
   } else if (e > 1023) {
     s_case = "Infinity";
@@ -74,6 +75,8 @@ function get_results(n: string, b: number, e: number): string[] {
     mantissa = (!isNaN(parseFloat(normalized)) ? 
       normalized.substring(Math.max(normalized.indexOf(".") + 1, 1)) : "").padEnd(52, "0");
   }
+
+  console.log(s_case)
 
   let hex = '0x' + (
   parseInt(sign + exponent_bits, 2).toString(16).toUpperCase() +
