@@ -15,6 +15,8 @@ export default function Home() {
   const [showOutput, setShowOutput] = useState(false);
   const [groups, setGroups] = useState<string[] | null>(null);
 
+  const [error, setError] = useState('');
+
   const handleReset = (event: any) => {
     setNumberValue("");
     setExponentValue("");
@@ -37,8 +39,21 @@ export default function Home() {
 
   const handleNumberChange = (event: any) => {
     if (showOutput) setShowOutput(false);
-    if (baseValue === 2)
-      if (!/^[01.-]*$/.test(event.target.value)) return;
+    if ( baseValue === 10 ) {
+        if (!/^[0-9.-]*$/.test(event.target.value)) {
+            setError("Invalid input! Please enter only decimal digits (0-9), decimal point (.), or hyphen (-) for negative values.");
+            return; 
+        }
+    } 
+    if (baseValue === 2) {
+        if (!/^[01.-]*$/.test(event.target.value)) {
+            setError("Invalid input! Please enter only binary digits (0 or 1), decimal point (.), or hyphen (-) for negative values.");
+            return;
+        }
+    } 
+ 
+    setError("");
+    
     setNumberValue(event.target.value);
   };
 
@@ -65,7 +80,7 @@ export default function Home() {
     setDownloading(true);
 
     try {
-      const textContent = createTextFileContent(input, output); // Function provided below
+      const textContent = createTextFileContent(input, output); 
       const blob = new Blob([textContent], { type: 'text/plain' });
       const url = URL.createObjectURL(blob);
 
@@ -127,6 +142,11 @@ export default function Home() {
               <input type="number" id="exponent" step="any" className="w-[6rem] outline-none bg-white text-zinc-800 text-2xl px-2 py-1 rounded hover:bg-slate-200 transition colors duration-100 shadow-2xl shadow-zinc-200 border-zinc-100 border-2" placeholder={"0"} value={exponentValue} onChange={handleExponentChange} required/>
             </div>
           </section>
+
+          <div>
+                {/* Display error message if error exists */}
+                {error && <div className="flex flex-col gap-4 text-red-600" style={{fontSize:12, color: 'red' }}>{error}</div>}
+            </div>
 
           {/* special case */}
           {output?.s_case != "" && showOutput && (
